@@ -1,10 +1,16 @@
 from django.shortcuts import get_object_or_404, render
 from .models import *
 from django.http import Http404
+from django.core.paginator import Paginator
+
 # Create your views here.
 
 def post_list(request):
-    posts = Post.published.all()
+    posts_list = Post.published.all()
+    # Paginator 3 Posts je Seite
+    paginator = Paginator(posts_list, 3)
+    page_number = request.GET.get('page', 1)
+    posts = paginator.page(page_number)
     return render(request, 'blog/post/list.html', {'posts': posts})
 
 # def post_detail(request, id):
